@@ -1,0 +1,5 @@
+-e git+https://github.com/theorchard/lemon-py.git@0.0.1#egg=lemon
+
+<% if (package.enableI18n) { %>
+Flask-Babel==0.9
+<% } %>

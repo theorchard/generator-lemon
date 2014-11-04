@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel="stylesheet" href="/static/bundle.app.css">
+        <script src="/static/bundle.externs.js"></script>
+        <script src="/static/bundle.app.js"></script>
+    </head>
+
+    <body>
+        {{ view(
+            primary_view, fetch=params.fetch, params=params.params,
+            data=params.data) }}
+
+        <script>
+            lemon.initialize(
+                {{ jsonify(parent.to_dict())|safe }},
+                {{ jsonify(routes)|safe }});
+        </script>
+    </body>
+</html>

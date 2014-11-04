@@ -1,0 +1,9 @@
+{
+  "name": "generator-lemon",
+  "version": "0.0.1",
+  "description": "Generate a lemon application.",
+  "keywords": ["yeoman-generator"],
+  "dependencies": {
+    "yeoman-generator": "^0.17.3"
+  }
+}
