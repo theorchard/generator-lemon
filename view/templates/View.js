@@ -4,8 +4,6 @@ goog.require('lemon.views');
 
 
 /**
- * TODO: Documentation please.
- *
  * @extends {lemon.View}
  * @constructor
  */

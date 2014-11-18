@@ -72,8 +72,14 @@ module.exports = {
     // General files: libraries, namespace, views.
     libs: '<%= package.appName %>/libs/*',
     jsNamespace: '<%= package.appName %>/libs/<%= package.appName %>.js',
-    views: '<%= package.appName %>/<%= package.viewPath %>/**/*',
-    viewsTests: '<%= package.appName %>/<%= package.viewPath %>/**/*.tests.js',
+    views: '<%= package.appName %>/<%= package.viewPath %>**/*',
+    viewsPath: '<%= package.appName %>/<%= package.viewPath %>',
+    viewsDescriptions: '<%= package.appName %>/<%= package.viewPath %>**/*.yml',
+    viewsTemplates: '<%= package.appName %>/<%= package.viewPath %>**/*.nunjucks',
+    viewsJs: '<%= package.appName %>/<%= package.viewPath %>**/*.js',
+    viewsController: '<%= package.appName %>/<%= package.viewPath %>**/!(*tests).js',
+    viewsTests: '<%= package.appName %>/<%= package.viewPath %>**/*.tests.js',
+    tests: 'tests/**/*.js',
 
     linters: {
         files: {
