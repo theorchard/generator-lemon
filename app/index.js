@@ -70,6 +70,8 @@ var LemonGenerator = generators.Base.extend(
 
         this.mkdir('tasks');
         this.mkdir('tests');
+        this.mkdir('build');
+        this.mkdir('build/tests/')
         this.mkdir(pkg.appName);
         this.mkdir(viewPath);
         this.mkdir(appViewPath);
@@ -90,7 +92,8 @@ var LemonGenerator = generators.Base.extend(
             pkg.appName + '/libs/' + pkg.appName + '.js');
 
         // Create all files for the the application view.
-        ['.js', '.nunjucks', '.scss', '.tests.js'].forEach(function(ext) {
+        ['.js', '.nunjucks', '.scss',
+         '.yml', '.tests.js'].forEach(function(ext) {
             this.template('App' + ext, appViewFiles + ext);
         }, this);
     },
@@ -109,6 +112,7 @@ var MAIN_TEMPLATES = [
     'Makefile',
     'configs/babel.cfg',
     'configs/lemon.js',
+    'configs/tests.js',
     'gulpfile.js',
     'package.json',
     'requirements.txt',

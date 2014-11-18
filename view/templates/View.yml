@@ -1,0 +1,21 @@
+name: <%= package.appName %>.<%= package.viewName %>
+description: |
+    Please enter more information about what this view.
+
+api:
+    - /some/api/endpoint/
+
+params:
+    mandatory_name: type!
+    firstname: string
+
+tests:
+    key_for_test:
+        title: Title of a test
+        success: false
+        fetch:
+            endpoint: /url/to/fetch/
+            params:
+                key: value
+        params:
+            key: value

@@ -5,19 +5,18 @@
  * provides coverage information.
  */
 
+var config = require('../configs/lemon');
+
+var fs = require('fs');
+var glob = require('glob');
 var lemon = require('lemon');
 
-var rootPath = '../';
+
 var closurePath = lemon.bower + 'closurelibrary/closure/goog/';
-var libs = rootPath + '<%= package.appName %>/libs/*.js';
-var views = rootPath + '<%= package.appName %>/<%= package.viewPath %>/**/*.js';
-var coverage = rootPath + '<%= package.appName %>/<%= package.viewPath %>/**/!(*tests).js';
-var tests = rootPath + 'tests/**/*.js';
-var testViews = rootPath + '<%= package.appName %>/<%= package.viewPath %>/**/*.tests.js';
-var preprocessors = {};
-
-
+var tests = 'tests/**/*.js';
 var files = [
+    'configs/tests.js',
+
     // closure base
     closurePath + 'base.js',
 
@@ -28,12 +27,30 @@ var files = [
 ];
 
 
-// Preprocessing some of the data (dependencies mostly.)
-preprocessors[tests] = ['closure'];
-preprocessors[libs] = ['closure', 'coverage'];
-preprocessors[views] = ['closure'];
-preprocessors[coverage] = ['closure', 'coverage'];
+// Creating the preprocessors.
+var preprocessors = {};
+preprocessors[lemon.tests] = ['closure'];
+preprocessors[config.viewsJs] = ['closure'];
+preprocessors[config.viewController] = ['closure', 'coverage'];
+preprocessors[config.libs] = ['closure', 'coverage'];
 preprocessors[closurePath + 'base.js'] = ['closure-deps'];
+preprocessors[config.tests] = ['closure'];
+
+
+// Convert all the yml files into js files that can be used within the tests.
+glob.sync(config.viewsDescriptions).forEach(function(file) {
+    var filepath = lemon.utils.convertYml(file, 'build/tests/');
+    if (filepath) {
+        files.push({pattern: filepath, included: false});
+        preprocessors[filepath] = ['closure'];
+    }
+});
+
+
+glob.sync(config.viewsTemplates).forEach(function(file) {
+    files.push({pattern: file, included: false, served: true});
+});
+
 
 lemon.files.forEach(function(file) {
     files.push({pattern: file, included: false});
@@ -42,17 +59,21 @@ lemon.files.forEach(function(file) {
 
 
 var karmaConfig = {
+    basePath: '../',
     browsers: ['PhantomJS'],
-    frameworks: ['mocha', 'chai', 'closure', 'sinon-chai'],
+    frameworks: ['mocha', 'chai', 'closure', 'sinon-chai', 'nunjucks'],
 
     files: files.concat([
-        // included files - tests
-        tests,
-        testViews,
+        // included files - tests.
+        {pattern: lemon.tests, included: false},
+
+        // Application tests.
+        config.tests,
+        config.viewsTests,
 
         // source files - these are only watched and served
-        {pattern: libs, included: false},
-        {pattern: views, included: false},
+        {pattern: config.libs, included: false},
+        {pattern: config.viewsJs, included: false},
 
         // external deps
         {pattern: closurePath + 'deps.js', included: false, served: false}
@@ -66,7 +87,7 @@ var karmaConfig = {
         'junit'],
 
     junitReporter: {
-        outputFile: '../build/jsunit.xml',
+        outputFile: 'build/jsunit.xml',
         suite: ''
     },
 
@@ -74,7 +95,7 @@ var karmaConfig = {
     coverageReporter: {
         type : 'cobertura',
         file: 'jscoverage.xml',
-        dir: '../build/',
+        dir: 'build/',
         subdir: '.'
     }
 };

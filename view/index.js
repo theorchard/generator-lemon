@@ -37,10 +37,10 @@ var ViewGenerator = generators.Base.extend(
             viewParts[viewParts.length -1 ]).join('/');
         var path = this.package.viewPath;
 
-        this.template('View.js', path + viewName + '.js');
-        this.template('View.tests.js', path + viewName + '.tests.js');
-        this.template('View.scss', path + viewName + '.scss');
-        this.template('View.nunjucks', path + viewName + '.nunjucks');
+        ['.js', '.tests.js', '.yml',
+         '.scss', '.nunjucks'].forEach(function(ext) {
+           this.template('View' + ext, path + viewName + ext);
+        }, this);
     }
 });
 
